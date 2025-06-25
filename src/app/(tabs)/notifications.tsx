@@ -2,14 +2,13 @@ import { FlatList, StyleSheet, Text, View, ActivityIndicator } from 'react-nativ
 import React from 'react'
 import { Stack } from 'expo-router'
 import { useHeaderHeight } from '@react-navigation/elements'
-import { NotificationType } from '@/types/type'
 import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '@/constants/Colors'
 import Animated, { FadeInDown } from 'react-native-reanimated'
-import { useNotifications } from '@/hooks/useNotifications'
+import { useTransactions } from '@/hooks/useTransactions'
 
 const NotificationsScreen = () => {
-  const { data: notifications, isLoading, error } = useNotifications();
+  const { data: notifications, isLoading, error } = useTransactions();
   const headerHeight = useHeaderHeight();
 
   if (isLoading) {
@@ -45,10 +44,10 @@ const NotificationsScreen = () => {
               entering={FadeInDown.delay(300 + index * 100).duration(500)}
             >
               <View style={styles.notificationIcon}>
-                <Ionicons 
-                  name={item.transactionType === 'EarnedPoints' ? "arrow-up-circle-outline" : "arrow-down-circle-outline"} 
-                  size={20} 
-                  color={item.transactionType === 'EarnedPoints' ? Colors.success : Colors.primary} 
+                <Ionicons
+                  name={item.transactionType === 'EarnedPoints' ? "arrow-up-circle-outline" : "arrow-down-circle-outline"}
+                  size={20}
+                  color={item.transactionType === 'EarnedPoints' ? Colors.success : Colors.primary}
                 />
               </View>
               <View style={styles.notificationInfo}>

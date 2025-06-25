@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Text, StyleSheet, FlatList, View, Image, Dimensions, ViewToken } from 'react-native'
+import { StyleSheet, FlatList, View, Image, Dimensions, ViewToken } from 'react-native'
 import Pagination from '@/components/Pagination';
 
 type Props = {

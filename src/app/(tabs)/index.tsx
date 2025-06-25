@@ -1,4 +1,4 @@
-import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import { Stack } from 'expo-router'
 import Header from '@/components/Header'
@@ -6,19 +6,20 @@ import { Colors } from '@/constants/Colors'
 import OutletList from '@/components/OutletList'
 import { useOutlets } from '@/hooks/useOutlets'
 import LoyaltyCardsSlider from '@/components/LoyaltyCardsSlider'
-import { useLoyaltyCards } from '@/hooks/useLoyaltyCards'
+import { useLoyaltyPoints } from '@/hooks/useLoyaltyPoints'
 import QrCode from '@/components/QrCode'
-import { useAuthStore } from '@/store/auth.store'
+import { useAuthStore } from '@/store/auth'
 import { Ionicons } from '@expo/vector-icons'
 import { useRewards } from '@/hooks/useRewards'
 import { RewardCard } from '@/components/RewardCard'
 
 const HomeScreen = () => {
-  const { data: outlets, isLoading: outletsLoading, error: outletsError } = useOutlets();
-  const { data: loyaltyCards, isLoading: loyaltyLoading, error: loyaltyError } = useLoyaltyCards();
-  const { data: rewards, isLoading: rewardsLoading, error: rewardsError } = useRewards();
-  const { user } = useAuthStore();
+  const { user, isHydrated } = useAuthStore();
   const [isQrVisible, setIsQrVisible] = useState(false);
+
+  const { data: outlets, isLoading: outletsLoading, error: outletsError } = useOutlets(undefined, { enabled: !!user && isHydrated });
+  const { data: loyaltyPoints, isLoading: loyaltyLoading, error: loyaltyError } = useLoyaltyPoints(undefined, { enabled: !!user && isHydrated });
+  const { data: rewards, isLoading: rewardsLoading, error: rewardsError } = useRewards(undefined, { enabled: !!user && isHydrated });
 
   const groupedRewards = rewards?.reduce((acc, reward) => {
     const existingReward = acc.find(r => r.id === reward.id);
@@ -29,6 +30,9 @@ const HomeScreen = () => {
     }
     return acc;
   }, [] as (typeof rewards[0] & { count: number })[]) || [];
+
+  if (!isHydrated) return null;
+  if (!user) return null; // Or a loading spinner
 
   if (outletsLoading || loyaltyLoading || rewardsLoading) {
     return (
@@ -54,7 +58,7 @@ const HomeScreen = () => {
       }} />
       <ScrollView>
         <View style={styles.container}>
-          <LoyaltyCardsSlider cards={loyaltyCards || []} />
+          <LoyaltyCardsSlider cards={loyaltyPoints || []} />
 
           {groupedRewards.length > 0 && (
             <View style={styles.rewardsSection}>
@@ -115,7 +119,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: 'bold',
     color: Colors.black,
     marginBottom: 16,

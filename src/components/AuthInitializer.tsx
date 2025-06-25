@@ -1,73 +1,71 @@
-import React, { useEffect } from 'react';
+import { useAuthStore } from '@/store/auth';
+import { validateAuthState } from '@/utils/jwt';
 import { useRouter, useSegments } from 'expo-router';
-import { useAuthStore } from '@/store/auth.store';
-import { validateAuthState } from '@/utils/auth.utils';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect } from 'react';
+import { LoadingScreen } from './LoadingScreen';
 
 // Define public routes that don't require authentication
-const PUBLIC_ROUTES = ['outlet-details'];
+const PUBLIC_ROUTES = ['/'];
 
 export const AuthInitializer = ({ children }: { children: React.ReactNode }) => {
-  const segments = useSegments();
-  const router = useRouter();
-  const { user, setUser, refreshToken } = useAuthStore();
+    const segments = useSegments();
+    const router = useRouter();
+    const { user, setUser, refreshToken, isLoading, isHydrated } = useAuthStore();
 
-  useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        // Check if we have stored auth data
-        const storedAuth = await AsyncStorage.getItem('auth-storage');
-        if (!storedAuth) return;
+    useEffect(() => {
+        const initializeAuth = async () => {
+            try {
+                if (!user) return;
 
-        const parsedAuth = JSON.parse(storedAuth);
-        const storedUser = parsedAuth.state.user;
+                // Validate the current auth state
+                const isValid = validateAuthState(user);
 
-        if (!storedUser) return;
+                if (isValid) {
+                    // If valid, keep the user in the store
+                    return;
+                } else if (user.refreshToken) {
+                    // If access token is invalid but we have a refresh token, try to refresh
+                    const refreshSuccess = await refreshToken();
+                    if (!refreshSuccess) {
+                        setUser(null);
+                    }
+                } else {
+                    // If no valid tokens, clear the user
+                    setUser(null);
+                }
+            } catch (error) {
+                console.error('Error initializing auth:', error);
+                setUser(null);
+            }
+        };
 
-        // Validate the stored auth state
-        const isValid = validateAuthState(storedUser);
-        
-        if (isValid) {
-          // If valid, set the user in the store
-          setUser(storedUser);
-        } else if (storedUser.refreshToken) {
-          // If access token is invalid but we have a refresh token, try to refresh
-          const refreshSuccess = await refreshToken();
-          if (!refreshSuccess) {
-            setUser(null);
-          }
-        } else {
-          // If no valid tokens, clear the user
-          setUser(null);
+        if (isHydrated) {
+            initializeAuth();
         }
-      } catch (error) {
-        console.error('Error initializing auth:', error);
-        setUser(null);
-      }
-    };
+    }, [refreshToken, setUser, user, isHydrated]);
 
-    initializeAuth();
-  }, []);
+    useEffect(() => {
+        if (!isHydrated) return;
 
-  useEffect(() => {
-    const inAuthGroup = segments[0] === '(tabs)';
-    const isPublicRoute = PUBLIC_ROUTES.includes(segments[0]);
+        const inAuthGroup = segments[0] === '(tabs)';
+        const isPublicRoute = PUBLIC_ROUTES.includes(segments[0] ?? '');
 
-    // Handle authentication and routing
-    if (!user) {
-      // If user is not authenticated
-      if (inAuthGroup && !isPublicRoute) {
-        // Redirect to sign-in if trying to access protected route
-        router.replace('/');
-      }
-    } else {
-      // If user is authenticated
-      if (!inAuthGroup && !isPublicRoute) {
-        // Redirect to main app if on non-protected route
-        router.replace('/(tabs)');
-      }
+        console.log('AuthInitializer:', { user, segments, inAuthGroup, isPublicRoute });
+
+        if (!user) {
+            if (inAuthGroup) {
+                router.replace('../signin');
+            }
+        } else {
+            if (!inAuthGroup && !isPublicRoute) {
+                router.replace('/(tabs)');
+            }
+        }
+    }, [user, segments, router, isHydrated]);
+
+    if (!isHydrated || isLoading) {
+        return <LoadingScreen />;
     }
-  }, [user, segments]);
 
-  return <>{children}</>;
-}; 
+    return <>{children}</>;
+};

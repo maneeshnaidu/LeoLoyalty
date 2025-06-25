@@ -3,8 +3,7 @@ import React from "react";
 import { Link, Stack } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "@/constants/Colors";
-import { Ionicons } from "@expo/vector-icons";
-import Animated, { FadeInDown, FadeInRight } from "react-native-reanimated";
+import Animated, { FadeInRight } from "react-native-reanimated";
 import SocialLoginButtons from "@/components/SocialLoginButtons";
 
 type Props = {};
@@ -22,16 +21,16 @@ const WelcomeScreen = (props: Props) => {
 
               <View style={styles.socialLoginWrapper} >
 
-                <SocialLoginButtons emailHref={"/signup"}/>
+                <SocialLoginButtons emailHref={"/signup"} />
               </View>
 
               <Text style={styles.loginText}>
                 Already have an account? {" "}
-              <Link href={"/signin"} asChild>
-                <TouchableOpacity>
-                  <Text style={styles.loginTextSpan}>Login</Text>
-                </TouchableOpacity>
-              </Link>
+                <Link href={"/signin"} asChild>
+                  <TouchableOpacity>
+                    <Text style={styles.loginTextSpan}>Login</Text>
+                  </TouchableOpacity>
+                </Link>
               </Text>
             </View>
           </LinearGradient>

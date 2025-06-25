@@ -1,17 +1,27 @@
 import { Colors } from '@/constants/Colors'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native'
-import Vendor from './Vendor'
-import { VendorType } from '@/types/type'
-import { Outlet } from '@/types/outlet.types'
+import { OutletType } from '@/types'
 import { OutletCard } from './OutletCard'
+import { useOutlets } from '@/hooks/useOutlets'
 
 type Props = {
-    outlets: Outlet[];
+    outlets: OutletType[];
     flatList: boolean;
 }
 
 const OutletList = ({ outlets, flatList = true }: Props) => {
+    const { data, refetch } = useOutlets();
+
+    useEffect(() => {
+        refetch();
+        // Optionally, you can log the fetched data:
+        // console.log('Fetched Outlets:', data);
+    }, []);
+
+    // Use data from the hook if available, otherwise fallback to props
+    const outletData = data ?? outlets;
+
     return (
         <View style={styles.container}>
             <View style={styles.titleWrapper}>
@@ -22,7 +32,7 @@ const OutletList = ({ outlets, flatList = true }: Props) => {
             </View>
             {flatList ? (
                 <FlatList
-                    data={outlets}
+                    data={outletData}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ index, item }) => (
                         <OutletCard item={item} />

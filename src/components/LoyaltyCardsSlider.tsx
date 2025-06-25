@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { LoyaltyCardType } from '@/types/type';
-import LoyaltyCard from './LoyaltyCard';
 import { Colors } from '@/constants/Colors';
+import { LoyaltyCardType } from '@/types';
+import React from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import LoyaltyCard from './LoyaltyCard';
 
 type Props = {
     cards: LoyaltyCardType[];

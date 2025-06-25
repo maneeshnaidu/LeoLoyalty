@@ -1,5 +1,5 @@
 import { Colors } from '@/constants/Colors';
-import { ProductType } from '@/types/type'
+import { ProductType } from '@/types'
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react'
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'

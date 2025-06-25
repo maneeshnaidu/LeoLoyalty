@@ -1,4 +1,4 @@
-import { Button, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import QRCode from 'react-native-qrcode-svg'
 

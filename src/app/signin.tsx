@@ -1,13 +1,13 @@
-import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native'
-import React, { useState } from 'react'
-import { Link, router, Stack } from 'expo-router'
-import { Colors } from '@/constants/Colors'
-import SocialLoginButtons from '@/components/SocialLoginButtons'
-import { Ionicons } from '@expo/vector-icons'
 import InputField from '@/components/InputField'
-import authService from '@/services/auth.service'
-import { LoginDto } from '@/types/auth.types'
-import { useAuthStore } from '@/store/auth.store'
+import SocialLoginButtons from '@/components/SocialLoginButtons'
+import { Colors } from '@/constants/Colors'
+import { authService } from '@/services/auth'
+import { useAuthStore } from '@/store/auth'
+import { LoginDto } from '@/types/auth'
+import { Ionicons } from '@expo/vector-icons'
+import { Link, router, Stack } from 'expo-router'
+import React, { useState } from 'react'
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 const SignInScreen = () => {
   const [username, setUsername] = useState('');
@@ -31,10 +31,10 @@ const SignInScreen = () => {
 
       const response = await authService.login(loginData);
       console.log('Login successful:', response);
-      
+
       // Set user in auth store
       setUser(response);
-      
+
       // Navigate to main app
       router.dismissAll();
       router.push('/(tabs)');
@@ -60,7 +60,7 @@ const SignInScreen = () => {
       <View style={styles.container}>
         <Text style={styles.title}>Welcome Back</Text>
         {error && <Text style={styles.errorText}>{error}</Text>}
-        
+
         <InputField
           placeholder='Username'
           placeholderTextColor={Colors.gray}
@@ -75,9 +75,9 @@ const SignInScreen = () => {
           value={password}
           onChangeText={setPassword}
         />
-        
-        <TouchableOpacity 
-          style={styles.btn} 
+
+        <TouchableOpacity
+          style={styles.btn}
           onPress={handleLogin}
           disabled={isLoading}
         >
@@ -89,7 +89,7 @@ const SignInScreen = () => {
         </TouchableOpacity>
 
         <Text style={styles.loginText}>
-          Don't have an account? {" "}
+          Don&apos;t have an account? {" "}
           <Link href={"/signup"} asChild>
             <TouchableOpacity>
               <Text style={styles.loginTextSpan}>Signup</Text>

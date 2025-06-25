@@ -2,11 +2,11 @@ import { Colors } from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { Href, Link } from 'expo-router'
 import React from 'react'
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native'
+import { StyleSheet, TouchableOpacity, Text } from 'react-native'
 import Animated, { FadeInDown } from 'react-native-reanimated'
 
 type Props = {
-    emailHref: Href<string | Object>;
+    emailHref: Href;
 }
 
 const SocialLoginButtons = (props: Props) => {
@@ -15,7 +15,7 @@ const SocialLoginButtons = (props: Props) => {
     return (
         <>
             <Animated.View entering={FadeInDown.delay(500).duration(500)}>
-                <Link href={emailHref} asChild>
+                <Link href={emailHref as any} asChild>
                     <TouchableOpacity style={styles.button}>
                         <Ionicons
                             name="mail-outline"
@@ -28,7 +28,7 @@ const SocialLoginButtons = (props: Props) => {
             </Animated.View>
 
             <Animated.View entering={FadeInDown.delay(700).duration(500)}>
-                <Link href={emailHref} asChild>
+                <Link href={emailHref as any} asChild>
                     <TouchableOpacity style={styles.button}>
                         <Ionicons
                             name="logo-google"

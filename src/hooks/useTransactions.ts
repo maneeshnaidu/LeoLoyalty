@@ -1,18 +1,18 @@
 import { apiClient } from "@/api/client";
-import { OutletType, QueryObject } from "@/types";
+import { QueryObject, TransactionType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
-export const useOutlets = (query?: QueryObject, p0?: { enabled: boolean; }) => {
+export const useTransactions = (query?: QueryObject) => {
     return useQuery({
-        queryKey: ['outlets', query],
+        queryKey: ['transactions', query],
         queryFn: async () => {
             try {
-                const response = await apiClient.get<OutletType[]>('/outlets', {
+                const response = await apiClient.get<TransactionType[]>('/transactions', {
                     params: query
                 });
                 return response;
             } catch (error) {
-                console.error('Failed to fetch outlets:', error);
+                console.error('Failed to fetch transactions:', error);
                 throw error; // Let react-query handle the error
             }
         },

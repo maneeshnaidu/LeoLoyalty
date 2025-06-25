@@ -1,11 +1,11 @@
 import { StyleSheet, View, Image, TouchableOpacity, Text } from 'react-native';
-import { Outlet } from '@/types/outlet.types';
+import { OutletType } from '@/types';
 import { Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 
 interface OutletCardProps {
-  item: Outlet;
+  item: OutletType;
 }
 
 export const OutletCard = ({ item }: OutletCardProps) => {
@@ -24,11 +24,11 @@ export const OutletCard = ({ item }: OutletCardProps) => {
               <Text style={styles.categoryText}>{item.category}</Text>
             </View>
           </View>
-          
+
           <Text style={styles.description} numberOfLines={2}>
             {item.description}
           </Text>
-          
+
           <View style={styles.footer}>
             <View style={styles.infoRow}>
               <Ionicons name="location-outline" size={16} color={Colors.gray} />

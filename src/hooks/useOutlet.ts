@@ -1,10 +1,18 @@
-import { useQuery } from '@tanstack/react-query';
-import { outletsApi } from '@/api/outlets';
+import { apiClient } from "@/api/client";
+import { OutletType } from "@/types";
+import { useQuery } from "@tanstack/react-query";
 
 export const useOutlet = (id: number) => {
-  return useQuery({
-    queryKey: ['outlet', id],
-    queryFn: () => outletsApi.getById(id),
-    enabled: !!id,
-  });
-}; 
+    return useQuery({
+        queryKey: ['outlets', id],
+        queryFn: async () => {
+            try {
+                const response = await apiClient.get<OutletType>(`/outlets/${id}`);
+                return response;
+            } catch (error) {
+                console.error('Failed to fetch outlets:', error);
+                throw error; // Let react-query handle the error
+            }
+        },
+    });
+};

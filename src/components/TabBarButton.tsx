@@ -3,12 +3,14 @@ import { icon } from '@/constants/Icons';
 import React from 'react'
 import { Pressable, Text, StyleSheet, View, GestureResponderEvent } from 'react-native'
 
+type RouteName = keyof typeof icon;
+
 type Props = {
     label: string;
     isFocused: boolean;
     onPress: (event: GestureResponderEvent) => void;
     onLongPress: (event: GestureResponderEvent) => void;
-    routeName: string;
+    routeName: RouteName;
 };
 
 const TabBarButton = (props: Props) => {
@@ -19,7 +21,7 @@ const TabBarButton = (props: Props) => {
             onLongPress={onLongPress}
             style={styles.tabBarButton}
         >
-            {routeName == 'notifications' && (
+            {routeName === 'notifications' && (
                 //Notifications badge
                 <View style={styles.badgeWrapper}>
                     <Text style={styles.badgeText}>3</Text>

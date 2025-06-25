@@ -1,5 +1,5 @@
 import { Colors } from '@/constants/Colors';
-import { CategoryType } from '@/types/type';
+import { CategoryType } from '@/types';
 import React from 'react'
 import { FlatList, Image, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 

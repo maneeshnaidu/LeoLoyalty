@@ -6,11 +6,11 @@ import { Colors } from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { useOutlets } from '@/hooks/useOutlets'
 import { OutletCard } from '@/components/OutletCard'
-import { Outlet } from '@/types/outlet.types'
+import { OutletType } from '@/types'
 
 const ExploreScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const { data: outlets, isLoading, error } = useOutlets(searchQuery);
+  const { data: outlets, isLoading, error } = useOutlets({ address: searchQuery });
   const headerHeight = useHeaderHeight();
 
   if (isLoading) {
@@ -52,7 +52,7 @@ const ExploreScreen = () => {
           ) : null}
         </View>
 
-        <FlatList<Outlet>
+        <FlatList<OutletType>
           data={outlets || []}
           keyExtractor={item => item.id.toString()}
           showsVerticalScrollIndicator={false}

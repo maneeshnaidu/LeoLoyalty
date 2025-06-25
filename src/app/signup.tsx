@@ -1,28 +1,30 @@
-import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native'
-import React, { useState } from 'react'
-import { Ionicons } from '@expo/vector-icons'
-import { Colors } from '@/constants/Colors'
-import { Link, router, Stack } from 'expo-router'
 import InputField from '@/components/InputField'
 import SocialLoginButtons from '@/components/SocialLoginButtons'
-import authService from '@/services/auth.service'
-import { RegisterDto } from '@/types/auth.types'
+import { Colors } from '@/constants/Colors'
+import { authService } from '@/services/auth'
+import { useAuthStore } from '@/store/auth'
+import { RegisterDto } from '@/types/auth'
+import { Ionicons } from '@expo/vector-icons'
+import { Link, router, Stack } from 'expo-router'
+import React, { useState } from 'react'
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 type Props = {}
 
 const SignUpScreen = (props: Props) => {
+  const { setUser, setLoading, setError, isLoading, error } = useAuthStore();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isFormLoading, setIsFormLoading] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const handleSignUp = async () => {
     if (!username || !email || !password || !confirmPassword) {
-      setError('Please fill in all required fields');
+      setFormError('Please fill in all required fields');
       return;
     }
 
@@ -31,7 +33,7 @@ const SignUpScreen = (props: Props) => {
       return;
     }
 
-    setIsLoading(true);
+    setIsFormLoading(true);
     setError(null);
 
     try {
@@ -45,14 +47,17 @@ const SignUpScreen = (props: Props) => {
 
       const response = await authService.register(registerData);
       console.log('Registration successful:', response);
-      
+
+      // Set user in auth store
+      setUser(response);
+
       // Navigate to main app
       router.dismissAll();
       router.push('/(tabs)');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during registration');
     } finally {
-      setIsLoading(false);
+      setIsFormLoading(false);
     }
   };
 
@@ -114,7 +119,7 @@ const SignUpScreen = (props: Props) => {
           onChangeText={setConfirmPassword}
         />
 
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.btn}
           onPress={handleSignUp}
           disabled={isLoading}

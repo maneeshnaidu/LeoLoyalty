@@ -6,7 +6,6 @@ import 'react-native-reanimated';
 import { AuthInitializer } from '@/components/AuthInitializer';
 import { QueryProvider } from '@/providers/QueryProvider';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -42,8 +41,8 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="outlet-details/[id]" options={{ headerShown: true }} />
           <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="signin" options={{ presentation: 'modal' }} />
-          <Stack.Screen name="signup" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="signin" options={{ presentation: 'modal', headerShown: true }} />
+          <Stack.Screen name="signup" options={{ presentation: 'modal', headerShown: true }} />
         </Stack>
       </AuthInitializer>
     </QueryProvider>
