@@ -17,7 +17,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        // "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
@@ -33,10 +34,14 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/icon/splash-icon-dark.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#ffffff",
+          "dark": {
+            "image": "./assets/icon/splash-icon-light.png",
+            "backgroundColor": "#000000"
+          }
         }
       ]
     ],
@@ -48,6 +53,13 @@
       "eas": {
         "projectId": "1531efb8-2027-4c78-8257-0291856bf605"
       }
+    },
+    "owner": "azarotech",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/b9a3aea3-712e-4cdf-99ae-17f89433b8c5"
     }
   }
 }
