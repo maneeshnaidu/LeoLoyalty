@@ -50,7 +50,7 @@ export const AuthInitializer = ({ children }: { children: React.ReactNode }) => 
         const inAuthGroup = segments[0] === '(tabs)';
         const isPublicRoute = PUBLIC_ROUTES.includes(segments[0] ?? '');
 
-        console.log('AuthInitializer:', { user, segments, inAuthGroup, isPublicRoute });
+        // console.log('AuthInitializer:', { user, segments, inAuthGroup, isPublicRoute });
 
         if (!user) {
             if (inAuthGroup) {
