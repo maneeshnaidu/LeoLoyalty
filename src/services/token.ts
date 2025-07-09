@@ -4,6 +4,7 @@ class TokenService {
     private static instance: TokenService;
     private token: string | null = null;
     private refreshToken: string | null = null;
+    private isInitialized: boolean = false;
 
     private constructor() { }
 
@@ -14,7 +15,11 @@ class TokenService {
         return TokenService.instance;
     }
 
-    async initialize() {
+    async initialize(): Promise<{ token: string | null; refreshToken: string | null }> {
+        if (this.isInitialized) {
+            return { token: this.token, refreshToken: this.refreshToken };
+        }
+
         try {
             const storedTokens = await AsyncStorage.getItem('auth-tokens');
             if (storedTokens) {
@@ -22,8 +27,12 @@ class TokenService {
                 this.token = token;
                 this.refreshToken = refreshToken;
             }
+            this.isInitialized = true;
+            return { token: this.token, refreshToken: this.refreshToken };
         } catch (error) {
             console.error('Error initializing tokens:', error);
+            this.isInitialized = true;
+            return { token: null, refreshToken: null };
         }
     }
 
@@ -53,6 +62,10 @@ class TokenService {
         } catch (error) {
             console.error('Error clearing tokens:', error);
         }
+    }
+
+    hasValidTokens(): boolean {
+        return !!(this.token && this.refreshToken);
     }
 }
 

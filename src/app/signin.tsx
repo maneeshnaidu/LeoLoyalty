@@ -1,11 +1,13 @@
+import { AuthRedirect } from '@/components/AuthRedirect'
 import InputField from '@/components/InputField'
 import SocialLoginButtons from '@/components/SocialLoginButtons'
 import { Colors } from '@/constants/Colors'
 import { authService } from '@/services/auth'
 import { useAuthStore } from '@/store/auth'
 import { LoginDto } from '@/types/auth'
+import { NavigationUtils } from '@/utils/navigation'
 import { Ionicons } from '@expo/vector-icons'
-import { Link, router, Stack } from 'expo-router'
+import { Link, Stack } from 'expo-router'
 import React, { useState } from 'react'
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
@@ -33,11 +35,10 @@ const SignInScreen = () => {
       console.log('Login successful:', response);
 
       // Set user in auth store
-      setUser(response);
+      await setUser(response);
 
-      // Navigate to main app
-      router.dismissAll();
-      router.push('/(tabs)');
+      // Navigate to main app using safe navigation
+      NavigationUtils.goToMainApp();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during login');
     } finally {
@@ -45,14 +46,20 @@ const SignInScreen = () => {
     }
   };
 
+  const handleBack = () => {
+    // Use safe back navigation
+    NavigationUtils.goBack();
+  };
+
   return (
     <>
+      <AuthRedirect requireAuth={false} />
       <Stack.Screen
         options={{
           headerTitle: 'Signin',
           headerTitleAlign: 'center',
           headerLeft: () => (
-            <TouchableOpacity onPress={() => router.back()}>
+            <TouchableOpacity onPress={handleBack}>
               <Ionicons name="close" size={24} color={Colors.black} />
             </TouchableOpacity>
           ),

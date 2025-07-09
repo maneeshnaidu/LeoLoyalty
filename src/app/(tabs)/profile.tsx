@@ -1,16 +1,22 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
-import React from 'react';
 import { useAuthStore } from '@/store/auth';
-import { useRouter } from 'expo-router';
+import { NavigationUtils } from '@/utils/navigation';
 import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const ProfileScreen = () => {
   const { user, logout } = useAuthStore();
-  const router = useRouter();
 
-  const handleLogout = () => {
-    logout();
-    router.replace('../signin');
+  const handleLogout = async () => {
+    try {
+      await logout();
+      // Use safe navigation utility
+      NavigationUtils.goToSignin();
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Fallback navigation
+      NavigationUtils.goToSignin();
+    }
   };
 
   return (

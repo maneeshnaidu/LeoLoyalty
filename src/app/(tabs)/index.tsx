@@ -21,15 +21,7 @@ const HomeScreen = () => {
   const { data: loyaltyPoints, isLoading: loyaltyLoading, error: loyaltyError } = useLoyaltyPoints(undefined, { enabled: !!user && isHydrated });
   const { data: rewards, isLoading: rewardsLoading, error: rewardsError } = useRewards(undefined, { enabled: !!user && isHydrated });
 
-  const groupedRewards = rewards?.reduce((acc, reward) => {
-    const existingReward = acc.find(r => r.id === reward.id);
-    if (existingReward) {
-      existingReward.count = (existingReward.count || 1) + 1;
-    } else {
-      acc.push({ ...reward, count: 1 });
-    }
-    return acc;
-  }, [] as (typeof rewards[0] & { count: number })[]) || [];
+  const rewardsList = rewards || [];
 
   if (!isHydrated) return null;
   if (!user) return null; // Or a loading spinner
@@ -60,14 +52,13 @@ const HomeScreen = () => {
         <View style={styles.container}>
           <LoyaltyCardsSlider cards={loyaltyPoints || []} />
 
-          {groupedRewards.length > 0 && (
+          {rewardsList.length > 0 && (
             <View style={styles.rewardsSection}>
               <Text style={styles.sectionTitle}>Your Rewards</Text>
-              {groupedRewards.map((reward) => (
+              {rewardsList.map((reward) => (
                 <RewardCard
                   key={reward.id}
                   reward={reward}
-                  count={reward.count}
                   onPress={() => {
                     // Handle reward press
                   }}

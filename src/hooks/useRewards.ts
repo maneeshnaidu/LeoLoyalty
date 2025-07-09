@@ -8,6 +8,10 @@ export const useRewards = (undefined: undefined, p0: { enabled: boolean; }) => {
     return useQuery({
         queryKey: ['rewards'],
         queryFn: async () => {
+            if (!userCode) {
+                throw new Error('User code is required to fetch rewards');
+            }
+
             try {
                 const response = await apiClient.get<RewardType[]>(
                     `/rewards`,

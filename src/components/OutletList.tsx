@@ -17,7 +17,7 @@ const OutletList = ({ outlets, flatList = true }: Props) => {
         refetch();
         // Optionally, you can log the fetched data:
         // console.log('Fetched Outlets:', data);
-    }, []);
+    }, [refetch]);
 
     // Use data from the hook if available, otherwise fallback to props
     const outletData = data ?? outlets;

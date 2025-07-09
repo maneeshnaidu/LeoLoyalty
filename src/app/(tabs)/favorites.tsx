@@ -6,7 +6,7 @@ type Props = {}
 const FavoritesScreen = (props: Props) => {
   return (
     <View style={styles.container}>
-      <Text>Cart Screen</Text>
+      <Text>Favorites Screen</Text>
     </View>
   )
 }

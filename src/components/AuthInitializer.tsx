@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { LoadingScreen } from './LoadingScreen';
 
 // Define public routes that don't require authentication
-const PUBLIC_ROUTES = ['/'];
+const PUBLIC_ROUTES = ['/', 'signin', 'signup'];
 
 export const AuthInitializer = ({ children }: { children: React.ReactNode }) => {
     const segments = useSegments();

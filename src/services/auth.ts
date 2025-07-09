@@ -1,68 +1,62 @@
 import { apiClient } from '@/api/client';
+import { useAuthStore } from '@/store/auth';
 import { LoginDto, LoginResponse, RegisterDto } from '@/types/auth';
 
-interface TokenResponse {
-    token: string;
-    refreshToken: string;
-}
-
 class AuthService {
-    private static instance: AuthService;
-    private readonly BASE_URL = '/auth';
-
-    private constructor() { }
-
-    public static getInstance(): AuthService {
-        if (!AuthService.instance) {
-            AuthService.instance = new AuthService();
-        }
-        return AuthService.instance;
-    }
-
     async login(credentials: LoginDto): Promise<LoginResponse> {
         try {
-            const response = await apiClient.post<LoginResponse>(`${this.BASE_URL}/login`, credentials);
-            return response as LoginResponse;
+            const response = await apiClient.post<LoginResponse>('/auth/login', credentials);
+
+            // Store user in auth store
+            await useAuthStore.getState().setUser(response);
+
+            return response;
         } catch (error) {
-            throw this.handleError(error);
+            console.error('Login failed:', error);
+            throw error;
         }
     }
 
-    async register(credentials: RegisterDto): Promise<LoginResponse> {
+    async register(userData: RegisterDto): Promise<LoginResponse> {
         try {
-            const response = await apiClient.post<LoginResponse>(`${this.BASE_URL}/register`, credentials);
-            return response as LoginResponse;
-        } catch (error) {
-            throw this.handleError(error);
-        }
-    }
+            const response = await apiClient.post<LoginResponse>('/auth/register', userData);
 
-    async refreshToken(refreshToken: string): Promise<TokenResponse> {
-        try {
-            const response = await apiClient.post<TokenResponse>(
-                `${this.BASE_URL}/refresh-token`,
-                { refreshToken }
-            );
-            return response as TokenResponse;
+            // Store user in auth store
+            await useAuthStore.getState().setUser(response);
+
+            return response;
         } catch (error) {
-            throw this.handleError(error);
+            console.error('Registration failed:', error);
+            throw error;
         }
     }
 
     async logout(): Promise<void> {
         try {
-            await apiClient.post(`${this.BASE_URL}/logout`);
+            // Call logout endpoint if needed
+            await apiClient.post('/auth/logout');
         } catch (error) {
-            throw this.handleError(error);
+            console.error('Logout API call failed:', error);
+        } finally {
+            // Always clear local auth state
+            await useAuthStore.getState().logout();
         }
     }
 
-    private handleError(error: any): Error {
-        if (error.response?.data?.message) {
-            return new Error(error.response.data.message);
+    async getCurrentUser(): Promise<LoginResponse | null> {
+        try {
+            const response = await apiClient.get<LoginResponse>('/auth/me');
+            return response;
+        } catch (error) {
+            console.error('Failed to get current user:', error);
+            return null;
         }
-        return new Error('An unexpected error occurred');
+    }
+
+    isAuthenticated(): boolean {
+        const user = useAuthStore.getState().user;
+        return !!user;
     }
 }
 
-export const authService = AuthService.getInstance(); 
+export const authService = new AuthService(); 

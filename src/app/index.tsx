@@ -1,16 +1,19 @@
-import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
-import { Link, Stack } from "expo-router";
-import { LinearGradient } from "expo-linear-gradient";
-import { Colors } from "@/constants/Colors";
-import Animated, { FadeInRight } from "react-native-reanimated";
+import { AuthRedirect } from "@/components/AuthRedirect";
 import SocialLoginButtons from "@/components/SocialLoginButtons";
+import { Colors } from "@/constants/Colors";
+import { LinearGradient } from "expo-linear-gradient";
+import { Link, Stack } from "expo-router";
+import React from "react";
+import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Animated, { FadeInRight } from "react-native-reanimated";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type Props = {};
 
 const WelcomeScreen = (props: Props) => {
   return (
     <>
+      <AuthRedirect requireAuth={false} />
       <Stack.Screen options={{ headerShown: false }} />
       <ImageBackground source={require('@/assets/images/welcome.png')} style={{ flex: 1 }} resizeMode="cover">
         <View style={styles.container}>

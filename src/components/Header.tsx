@@ -3,16 +3,16 @@ import React from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors } from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
-import { SearchBar } from 'react-native-screens';
 import { Link } from 'expo-router';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type Props = {}
 
 const Header = (props: Props) => {
     const insets = useSafeAreaInsets();
     return (
         <View style={[styles.container, { paddingTop: insets.top, backgroundColor: 'white' }]}>
-            <Text style={styles.logo}>Logo</Text>
+            <Text style={styles.logo}>leo</Text>
             <Link href={'/explore'} asChild>
                 <TouchableOpacity style={styles.searchBar}>
                     <Text style={styles.searchText}>Search</Text>

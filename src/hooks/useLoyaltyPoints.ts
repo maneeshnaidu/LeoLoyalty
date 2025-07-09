@@ -8,6 +8,10 @@ export const useLoyaltyPoints = (query?: QueryObject, p0?: { enabled: boolean; }
     return useQuery({
         queryKey: ['loyaltyPoints'],
         queryFn: async () => {
+            if (!userCode) {
+                throw new Error('User code is required to fetch loyalty points');
+            }
+
             try {
                 const response = await apiClient.get<LoyaltyCardType[]>('/points', {
                     params: { userCode }
