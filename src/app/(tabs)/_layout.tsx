@@ -32,6 +32,7 @@ export default function TabLayout() {
                 name='favorites'
                 options={{
                     title: 'Favorites',
+                    href: null, // This hides the tab from the bottom tab bar
                     // tabBarBadge: 3,
                 }}
             />

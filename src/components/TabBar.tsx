@@ -1,5 +1,4 @@
 import { View, StyleSheet, LayoutChangeEvent } from 'react-native';
-import { useLinkBuilder, useTheme } from '@react-navigation/native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import TabBarButton from './TabBarButton';
 import { Colors } from '@/constants/Colors';
@@ -9,13 +8,15 @@ import { useEffect, useState } from 'react';
 export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     const [dimensions, setDimensions] = useState({ width: 100, height: 20 });
 
-    const buttonWidth = dimensions.width / state.routes.length;
+    // Filter out the 'favorites' tab
+    const visibleRoutes = state.routes.filter(route => route.name !== 'favorites');
+    const buttonWidth = dimensions.width / visibleRoutes.length;
 
     useEffect(() => {
         tabPositionX.value = withTiming(state.index * buttonWidth, {
             duration: 200
         });
-    }, [state.index]);
+    }, [state.index, buttonWidth]);
 
     const onTabBarLayout = (e: LayoutChangeEvent) => {
         setDimensions({
@@ -42,7 +43,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
                 height: 2,
                 width: buttonWidth / 2,
             }]} />
-            {state.routes.map((route, index) => {
+            {visibleRoutes.map((route, index) => {
                 const { options } = descriptors[route.key];
                 const label =
                     typeof options.tabBarLabel === 'string'
@@ -78,7 +79,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
                         onPress={onPress}
                         onLongPress={onLongPress}
                         isFocused={isFocused}
-                        routeName={route.name}
+                        routeName={route.name as any}
                         label={label}
                     />
                 );

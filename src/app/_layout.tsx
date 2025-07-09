@@ -1,6 +1,4 @@
-import { AuthErrorBoundary } from '@/components/AuthErrorBoundary';
 import { AuthInitializer } from '@/components/AuthInitializer';
-import { NavigationErrorBoundary } from '@/components/NavigationErrorBoundary';
 import { QueryProvider } from '@/providers/QueryProvider';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -30,29 +28,23 @@ export default function RootLayout() {
   }
 
   return (
-    <NavigationErrorBoundary>
-      <AuthErrorBoundary>
-        <QueryProvider>
-          <AuthInitializer>
-            {/* <NavigationDebug /> */}
-            {/* <AuthDebug /> */}
-            <Stack
-              screenOptions={{
-                headerShown: false,
-                animation: 'slide_from_right',
-                gestureEnabled: true,
-                gestureDirection: 'horizontal',
-              }}
-            >
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="outlet-details/[id]" options={{ headerShown: true }} />
-              <Stack.Screen name="index" options={{ headerShown: false }} />
-              <Stack.Screen name="signin" options={{ presentation: 'modal', headerShown: true }} />
-              <Stack.Screen name="signup" options={{ presentation: 'modal', headerShown: true }} />
-            </Stack>
-          </AuthInitializer>
-        </QueryProvider>
-      </AuthErrorBoundary>
-    </NavigationErrorBoundary>
+    <QueryProvider>
+      <AuthInitializer>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            animation: 'slide_from_right',
+            gestureEnabled: true,
+            gestureDirection: 'horizontal',
+          }}
+        >
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="outlet-details/[id]" options={{ headerShown: true }} />
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="signin" options={{ presentation: 'modal', headerShown: true }} />
+          <Stack.Screen name="signup" options={{ presentation: 'modal', headerShown: true }} />
+        </Stack>
+      </AuthInitializer>
+    </QueryProvider>
   );
 }

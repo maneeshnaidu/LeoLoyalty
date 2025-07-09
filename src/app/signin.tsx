@@ -1,4 +1,3 @@
-import { AuthRedirect } from '@/components/AuthRedirect'
 import InputField from '@/components/InputField'
 import SocialLoginButtons from '@/components/SocialLoginButtons'
 import { Colors } from '@/constants/Colors'
@@ -53,7 +52,6 @@ const SignInScreen = () => {
 
   return (
     <>
-      <AuthRedirect requireAuth={false} />
       <Stack.Screen
         options={{
           headerTitle: 'Signin',

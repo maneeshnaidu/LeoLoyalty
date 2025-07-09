@@ -1,4 +1,3 @@
-import { AuthRedirect } from "@/components/AuthRedirect";
 import SocialLoginButtons from "@/components/SocialLoginButtons";
 import { Colors } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
@@ -13,7 +12,6 @@ type Props = {};
 const WelcomeScreen = (props: Props) => {
   return (
     <>
-      <AuthRedirect requireAuth={false} />
       <Stack.Screen options={{ headerShown: false }} />
       <ImageBackground source={require('@/assets/images/welcome.png')} style={{ flex: 1 }} resizeMode="cover">
         <View style={styles.container}>
